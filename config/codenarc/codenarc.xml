@@ -64,9 +64,6 @@
     </ruleset-ref>
 
     <ruleset-ref path='rulesets/unnecessary.xml'>
-        <rule-config name='UnnecessaryPublicModifier'>
-            <property name='enabled' value='false'/>
-        </rule-config>
     </ruleset-ref>
 
     <ruleset-ref path='rulesets/unused.xml'>
