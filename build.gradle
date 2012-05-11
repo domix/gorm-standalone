@@ -1,25 +1,17 @@
-description = 'GORM standlone POC'
-
-apply plugin: 'base'
-apply plugin: 'idea'
-
-task wrap(type: Wrapper, description: "create a gradlew") {
-  gradleVersion = '1.0-rc-3'
-}
+description = 'GORM standalone POC'
 
 group = 'to.sindica.ahpm.gormpoc'
 version = '0.1-SNAPSHOT'
 
+apply plugin: 'base'
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'idea'
-apply plugin: 'maven'
 apply plugin: 'project-report'
 apply plugin: 'codenarc'
 
 sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
-
 
 repositories {
   mavenCentral()
@@ -33,30 +25,7 @@ dependencies {
   compile 'joda-time:joda-time-hibernate:1.3'
 
   testCompile 'junit:junit:4.10'
-  testCompile "org.easytesting:fest-assert:1.4"
-  testCompile "org.mockito:mockito-all:1.9.0"
 
   testRuntime 'com.h2database:h2:1.3.166'
   testRuntime'commons-dbcp:commons-dbcp:1.4'
 }
-
-task makeDirs(description: 'make all dirs for project setup') << {
-  def sources = [sourceSets.main, sourceSets.test]
-  sources*.allSource*.srcDirs.flatten().each { File srcDir ->
-    println "making $srcDir"
-    srcDir.mkdirs()
-  }
-}
-
-buildscript {
-  apply from: 'https://github.com/valkolovos/gradle_cobertura/raw/master/repo/gradle_cobertura/gradle_cobertura/1.2/coberturainit.gradle'
-}
-
-cobertura {
-  coverageSourceDirs << project.sourceSets.main.groovy.srcDirs
-}
-
-//This line is a workaround to prevent this issue; http://issues.gradle.org/browse/GRADLE-2023
-//The workaround is explained here: https://github.com/valkolovos/gradle_cobertura/issues/18
-//cobertura.dependsOn cleanTest
-
