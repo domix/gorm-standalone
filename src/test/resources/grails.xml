@@ -1,0 +1,5 @@
+<grails>
+    <resources>
+        <resource>com.awesomecompany.Person</resource>
+    </resources>
+</grails>

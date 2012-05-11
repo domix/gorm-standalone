@@ -35,14 +35,40 @@
         </property>
     </bean>
 
-    <gorm:sessionFactory
-            base-package="com.coollabs.cooldeals"
-            data-source-ref="dataSource"
-            message-source-ref="messageSource">
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <gorm:sessionFactory id="sessionFactory" base-package="com.awesomecompany" data-source-ref="dataSource"
+                         message-source-ref="messageSource">
         <property name="hibernateProperties">
             <util:map>
-                <entry key="hibernate.hbm2ddl.auto" value="update"/>
+                <entry key="hibernate.hbm2ddl.auto" value="create"/>
             </util:map>
         </property>
     </gorm:sessionFactory>
+
+    <bean id="grailsApplication" class="com.awesomecompany.gorm.InitGrailsApplicationFactoryBean">
+        <property name="grailsDescriptor" value="/grails.xml"/>
+        <property name="grailsResourceLoader" ref="grailsResourceLoader"/>
+    </bean>
+
+    <bean id="pluginManager" class="org.codehaus.groovy.grails.plugins.GrailsPluginManagerFactoryBean">
+        <property name="grailsDescriptor" value="/grails.xml"/>
+        <property name="application" ref="grailsApplication"/>
+    </bean>
+
+    <bean id="grailsConfigurator" class="org.codehaus.groovy.grails.commons.spring.GrailsRuntimeConfigurator">
+        <constructor-arg>
+            <ref bean="grailsApplication"/>
+        </constructor-arg>
+        <property name="pluginManager" ref="pluginManager"/>
+    </bean>
+
+    <bean id="grailsResourceLoader" class="org.codehaus.groovy.grails.commons.GrailsResourceLoaderFactoryBean"/>
+
+    <bean id="grailsDomainClassMappingContext"
+          class="org.codehaus.groovy.grails.domain.GrailsDomainClassMappingContext">
+        <constructor-arg ref="grailsApplication"/>
+    </bean>
 </beans>
