@@ -54,7 +54,7 @@ class Person {
     lastUpdated type: PersistentDateTime
   }
 
-  public String toString() {
+  String toString() {
     "$firstName $lastName"
   }
 

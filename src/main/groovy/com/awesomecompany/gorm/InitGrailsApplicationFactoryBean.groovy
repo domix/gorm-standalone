@@ -15,8 +15,8 @@ class InitGrailsApplicationFactoryBean extends GrailsApplicationFactoryBean {
    * You need to do this, because is necessary to explicitely call the initialise on GrailsApplication
    */
   @Override
-  public void afterPropertiesSet() throws Exception {
+  void afterPropertiesSet() throws Exception {
     super.afterPropertiesSet()
-    super.getObject().initialise()
+    super.object.initialise()
   }
 }
