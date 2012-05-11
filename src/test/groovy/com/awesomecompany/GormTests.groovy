@@ -15,15 +15,21 @@ class GormTests {
   @Test
   void shouldBuildApplicationContext() {
     ApplicationContext applicationContext = new ClassPathXmlApplicationContext('/appCtxGorm.xml');
-
     assert applicationContext
-
     def p = Person.get(1)
-
     assert !p
 
-    p = new Person()
+    def person = new Person(
+        firstName: 'Domingo',
+        email: 'domingo.suarez@gmail.com'
+    )
 
-    assert !p.validate()
+    person.save()
+
+
+    def people = Person.list()
+    people.each {
+      println it
+    }
   }
 }
