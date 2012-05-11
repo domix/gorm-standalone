@@ -1,8 +1,11 @@
 package com.awesomecompany
 
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
-import org.springframework.context.support.ClassPathXmlApplicationContext
+import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,25 +14,20 @@ import org.springframework.context.support.ClassPathXmlApplicationContext
  * Time: 17:27
  * To change this template use File | Settings | File Templates.
  */
+@RunWith(SpringJUnit4ClassRunner)
+@ContextConfiguration('/appCtxGorm.xml')
 class GormTests {
-  @Test
-  void shouldBuildApplicationContext() {
-    ApplicationContext applicationContext = new ClassPathXmlApplicationContext('/appCtxGorm.xml');
-    assert applicationContext
-    def p = Person.get(1)
-    assert !p
+  @Autowired
+  ApplicationContext applicationContext
 
+  @Test
+  void shouldValidatePersonUsingConstraints() {
     def person = new Person(
         firstName: 'Domingo',
         email: 'domingo.suarez@gmail.com'
     )
 
-    person.save()
+    assert person.save()
 
-
-    def people = Person.list()
-    people.each {
-      println it
-    }
   }
 }
