@@ -11,6 +11,9 @@ import org.codehaus.groovy.grails.commons.GrailsApplicationFactoryBean
  */
 class InitGrailsApplicationFactoryBean extends GrailsApplicationFactoryBean {
   @Override
+  /**
+   * You need to do this, because is necessary to explicitely call the initialise on GrailsApplication
+   */
   public void afterPropertiesSet() throws Exception {
     super.afterPropertiesSet()
     super.getObject().initialise()
