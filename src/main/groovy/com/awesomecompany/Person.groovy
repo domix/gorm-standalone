@@ -15,12 +15,10 @@ import org.joda.time.contrib.hibernate.PersistentDateTime
 class Person {
   String firstName
   String lastName
-  Locale locale
   String referrerCode
   String referredByCode
   Long referredById
   boolean registered = false
-  Set subscriptions, purchases
 
   String email
   String password
@@ -41,11 +39,12 @@ class Person {
     referrerCode nullableMaxSize
     referredByCode nullableMaxSize
     referredById onlyNullable
-    locale(blank: false)
+
 
     email(blank: false, unique: true, email: true)
     password onlyNullable
     lastUpdated onlyNullable
+    dateCreated onlyNullable
   }
 
   /* Mappings */
