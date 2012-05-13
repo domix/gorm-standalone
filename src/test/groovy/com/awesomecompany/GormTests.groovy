@@ -33,4 +33,14 @@ class GormTests {
     assert personInDB.firstName == 'Domingo'
   }
 
+  @Test
+  void shouldValidatePersonUsingConstraints() {
+    def person = new Person()
+    def validPerson = person.validate()
+    def hasErrors = person.hasErrors()
+
+    assert person.errors
+    assert hasErrors
+    assert !validPerson
+  }
 }
