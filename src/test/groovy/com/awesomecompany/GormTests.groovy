@@ -21,13 +21,16 @@ class GormTests {
   ApplicationContext applicationContext
 
   @Test
-  void shouldValidatePersonUsingConstraints() {
+  void shouldSavePerson() {
     def person = new Person(
         firstName: 'Domingo',
+        lastName: 'Suarez',
         email: 'domingo.suarez@gmail.com'
     )
 
     assert person.save()
-
+    def personInDB = Person.findByEmail('domingo.suarez@gmail.com')
+    assert personInDB.firstName == 'Domingo'
   }
+
 }
