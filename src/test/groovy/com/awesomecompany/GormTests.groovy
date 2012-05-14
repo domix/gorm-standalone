@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.codehaus.groovy.grails.orm.hibernate.validation.HibernateDomainClassValidator
 import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
+import org.springframework.transaction.annotation.Transactional
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,7 +18,8 @@ import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
  * To change this template use File | Settings | File Templates.
  */
 @RunWith(SpringJUnit4ClassRunner)
-@ContextConfiguration('/appCtxDefaultGorm.xml')
+@ContextConfiguration('/schema/appCtx.xml')
+@Transactional
 class GormTests {
   @Autowired
   ApplicationContext applicationContext
