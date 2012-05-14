@@ -1,13 +1,18 @@
 package org.codehaus.groovy.grails.orm.hibernate.cfg;
 
+import com.awesomecompany.gorm.InitGrailsApplicationFactoryBean;
 import grails.persistence.Entity;
 import org.codehaus.groovy.grails.commons.DefaultGrailsApplication;
 import org.codehaus.groovy.grails.commons.DomainClassArtefactHandler;
 import org.codehaus.groovy.grails.commons.GrailsApplication;
+import org.codehaus.groovy.grails.commons.GrailsResourceLoaderFactoryBean;
+import org.codehaus.groovy.grails.commons.spring.GrailsRuntimeConfigurator;
+import org.codehaus.groovy.grails.domain.GrailsDomainClassMappingContext;
 import org.codehaus.groovy.grails.orm.hibernate.ConfigurableLocalSessionFactoryBean;
 import org.codehaus.groovy.grails.orm.hibernate.GrailsHibernateTransactionManager;
 import org.codehaus.groovy.grails.orm.hibernate.support.SpringLobHandlerDetectorFactoryBean;
 import org.codehaus.groovy.grails.orm.hibernate.validation.HibernateDomainClassValidator;
+import org.codehaus.groovy.grails.plugins.GrailsPluginManagerFactoryBean;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
@@ -185,6 +190,40 @@ class XGORMSessionFactoryDefinitionParser implements BeanDefinitionParser {
 
       targetRegistry.registerBeanDefinition("transactionManager", transactionManagerBean);
     }
+
+    GenericBeanDefinition grailsResourceLoaderBean = new GenericBeanDefinition();
+    grailsResourceLoaderBean.setBeanClass(GrailsResourceLoaderFactoryBean.class);
+    targetRegistry.registerBeanDefinition("grailsResourceLoader", grailsResourceLoaderBean);
+
+    RuntimeBeanReference grailsApplication = new RuntimeBeanReference(GrailsApplication.APPLICATION_ID);
+    String grailsDescriptor = element.getAttribute("grailsDescriptor");
+
+    GenericBeanDefinition grailsDomainClassMappingContextBean = new GenericBeanDefinition();
+    grailsDomainClassMappingContextBean.setBeanClass(GrailsDomainClassMappingContext.class);
+    ConstructorArgumentValues constructorArgsGDCMCB = grailsDomainClassMappingContextBean.getConstructorArgumentValues();
+    constructorArgsGDCMCB.addGenericArgumentValue(grailsApplication);
+    targetRegistry.registerBeanDefinition("grailsDomainClassMappingContext", grailsDomainClassMappingContextBean);
+
+    GenericBeanDefinition grailsPluginManagerFactoryBean = new GenericBeanDefinition();
+    grailsPluginManagerFactoryBean.setBeanClass(GrailsPluginManagerFactoryBean.class);
+    grailsPluginManagerFactoryBean.getPropertyValues().addPropertyValue("application", grailsApplication);
+    grailsPluginManagerFactoryBean.getPropertyValues().addPropertyValue("grailsDescriptor", grailsDescriptor);
+    targetRegistry.registerBeanDefinition("pluginManager", grailsPluginManagerFactoryBean);
+
+    RuntimeBeanReference pluginManager = new RuntimeBeanReference("pluginManager");
+
+    GenericBeanDefinition grailsConfiguratorBean = new GenericBeanDefinition();
+    grailsConfiguratorBean.setBeanClass(GrailsRuntimeConfigurator.class);
+    ConstructorArgumentValues constructorArgsgrailsConfiguratorBean = grailsConfiguratorBean.getConstructorArgumentValues();
+    constructorArgsgrailsConfiguratorBean.addGenericArgumentValue(grailsApplication);
+    grailsConfiguratorBean.getPropertyValues().addPropertyValue("pluginManager", pluginManager);
+    targetRegistry.registerBeanDefinition("grailsConfigurator", grailsConfiguratorBean);
+
+    GenericBeanDefinition grailsApplicationBean = new GenericBeanDefinition();
+    grailsApplicationBean.setBeanClass(InitGrailsApplicationFactoryBean.class);
+    grailsApplicationBean.getPropertyValues().addPropertyValue("grailsResourceLoader", new RuntimeBeanReference("grailsResourceLoader"));
+    grailsApplicationBean.getPropertyValues().addPropertyValue("grailsDescriptor", grailsDescriptor);
+    targetRegistry.registerBeanDefinition(GrailsApplication.APPLICATION_ID, grailsApplicationBean);
 
     parserContext.getDelegate().parsePropertyElements(element, sessionFactoryBean);
     return sessionFactoryBean;

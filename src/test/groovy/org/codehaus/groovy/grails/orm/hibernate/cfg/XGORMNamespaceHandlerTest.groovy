@@ -5,6 +5,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
+import org.junit.Ignore
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,5 +28,18 @@ class XGORMNamespaceHandlerTest {
     assert person.save()
     def personInDB = Person.findByEmail('domingo.suarez@gmail.com')
     assert personInDB.firstName == 'Domingo'
+  }
+
+  @Test
+  @Ignore
+  void shouldValidatePersonUsingConstraints() {
+    def person = new Person()
+
+    def validPerson = person.validate()
+    def hasErrors = person.hasErrors()
+
+    assert person.errors
+    assert hasErrors
+    assert !validPerson
   }
 }

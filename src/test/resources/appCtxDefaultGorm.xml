@@ -39,11 +39,15 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <gorm:sessionFactory id="sessionFactory" base-package="com.awesomecompany" data-source-ref="dataSource"
+    <gorm:sessionFactory id="sessionFactory"
+                         base-package="com.awesomecompany"
+                         data-source-ref="dataSource"
                          message-source-ref="messageSource">
         <property name="hibernateProperties">
             <util:map>
                 <entry key="hibernate.hbm2ddl.auto" value="create"/>
+                <entry key="hibernate.show_sql" value="true"/>
+                <entry key="hibernate.format_sql" value="true"/>
             </util:map>
         </property>
     </gorm:sessionFactory>
