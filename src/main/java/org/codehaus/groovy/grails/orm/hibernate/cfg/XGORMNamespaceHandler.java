@@ -1,8 +1,9 @@
-package org.codehaus.groovy.grails.orm.hibernate.cfg
+package org.codehaus.groovy.grails.orm.hibernate.cfg;
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.xml.NamespaceHandlerSupport
+import groovy.lang.ExpandoMetaClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,11 +13,11 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport
  * To change this template use File | Settings | File Templates.
  */
 class XGORMNamespaceHandler extends NamespaceHandlerSupport {
-  private static final Logger log = new LoggerFactory().getLogger(XGORMNamespaceHandler)
+  private static final Logger log = LoggerFactory.getLogger(XGORMNamespaceHandler.class);
 
-  void init() {
-    log.debug('init')
+  public void init() {
+    log.debug("init");
     ExpandoMetaClass.enableGlobally();
-    registerBeanDefinitionParser('sessionFactory', new XGORMSessionFactoryDefinitionParser());
+    registerBeanDefinitionParser("sessionFactory", new XGORMSessionFactoryDefinitionParser());
   }
 }
