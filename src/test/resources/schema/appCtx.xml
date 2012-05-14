@@ -21,7 +21,7 @@
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="org.h2.Driver"/>
-        <property name="url" value="jdbc:h2:demo"/>
+        <property name="url" value="jdbc:h2:demoSchema"/>
         <property name="username" value="sa"/>
         <property name="password" value=""/>
     </bean>
@@ -47,7 +47,7 @@
 
         <property name="hibernateProperties">
             <util:map>
-                <entry key="hibernate.hbm2ddl.auto" value="create"/>
+                <entry key="hibernate.hbm2ddl.auto" value="create-drop"/>
                 <entry key="hibernate.show_sql" value="true"/>
                 <entry key="hibernate.format_sql" value="true"/>
             </util:map>

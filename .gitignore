@@ -11,4 +11,4 @@ bin
 *.ipr
 *.iws
 out
-demo.*
+demo*

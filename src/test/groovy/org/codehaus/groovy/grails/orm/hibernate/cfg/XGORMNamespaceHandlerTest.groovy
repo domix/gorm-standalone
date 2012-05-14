@@ -7,6 +7,10 @@ import org.junit.runner.RunWith
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.transaction.annotation.Transactional
+import org.slf4j.LoggerFactory
+import org.slf4j.Logger
+
+import static com.awesomecompany.TestUtil.*
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,19 +21,42 @@ import org.springframework.transaction.annotation.Transactional
  */
 @RunWith(SpringJUnit4ClassRunner)
 @ContextConfiguration('/schema/appCtx.xml')
+//@ContextConfiguration('/appCtxDefaultGorm.xml')
 @Transactional
 class XGORMNamespaceHandlerTest {
+  private static final Logger log = LoggerFactory.getLogger(XGORMNamespaceHandlerTest)
+
   @Test
   void shouldSavePerson() {
-    def person = new Person(
-        firstName: 'Domingo',
-        lastName: 'Suarez',
-        email: 'domingo.suarez@gmail.com'
-    )
+    def person = newDemoPerson()
+
+    person.save()
+
+    def people = Person.list()
+    assert people
+    log.debug(people.dump())
+
+    def personInDB = Person.findByEmail(EMAIL)
+    assert personInDB
+    assert personInDB.firstName == FIRST_NAME
+
+  }
+
+  @Test
+  void shouldQueryUsingCriteriaWithOneField() {
+    def person = newDemoPerson()
 
     assert person.save()
-    def personInDB = Person.findByEmail('domingo.suarez@gmail.com')
-    assert personInDB.firstName == 'Domingo'
+
+
+    def c = Person.withCriteria(uniqueResult: true) {
+      eq 'email', EMAIL
+    }
+
+    log.debug(c.dump())
+
+    assert c
+    assert FIRST_NAME == c.firstName
   }
 
   @Test

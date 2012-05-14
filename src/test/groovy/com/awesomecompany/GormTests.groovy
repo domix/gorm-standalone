@@ -3,11 +3,15 @@ package com.awesomecompany
 import org.codehaus.groovy.grails.orm.hibernate.validation.HibernateDomainClassValidator
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.transaction.annotation.Transactional
+
+import static com.awesomecompany.TestUtil.*
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional
 @ContextConfiguration('/schema/appCtx.xml')
 @Transactional
 class GormTests {
+  private static final Logger log = LoggerFactory.getLogger(GormTests)
   @Autowired
   ApplicationContext applicationContext
 
@@ -27,15 +32,11 @@ class GormTests {
 
   @Test
   void shouldSavePerson() {
-    def person = new Person(
-        firstName: 'Domingo',
-        lastName: 'Suarez',
-        email: 'domingo.suarez@gmail.com'
-    )
+    def person = newDemoPerson()
 
     assert person.save()
-    def personInDB = Person.findByEmail('domingo.suarez@gmail.com')
-    assert personInDB.firstName == 'Domingo'
+    def personInDB = Person.findByEmail(EMAIL)
+    assert FIRST_NAME == personInDB.firstName
   }
 
   @Test
@@ -61,4 +62,22 @@ class GormTests {
     assert hasErrors
     assert !validPerson
   }
+
+  @Test
+  void shouldQueryUsingCriteriaWithOneField() {
+    def person = newDemoPerson()
+
+    assert person.save()
+
+
+    def c = Person.withCriteria(uniqueResult: true) {
+      eq 'email', EMAIL
+    }
+
+    log.debug(c.dump())
+
+    assert c
+    assert FIRST_NAME == c.firstName
+  }
+
 }
