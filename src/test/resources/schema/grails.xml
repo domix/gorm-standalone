@@ -1,0 +1,12 @@
+<grails>
+
+    <resources>
+        <resource>com.awesomecompany.Person</resource>
+    </resources>
+    <!--
+    <plugins>
+        <plugin>org.codehaus.groovy.grails.plugins.DomainClassGrailsPlugin</plugin>
+        <plugin>org.codehaus.groovy.grails.plugins.orm.hibernate.HibernatePluginSupport</plugin>
+    </plugins>
+    -->
+</grails>
