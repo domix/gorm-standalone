@@ -40,6 +40,9 @@
     </ruleset-ref>
 
     <ruleset-ref path='rulesets/imports.xml'>
+        <rule-config name="MisorderedStaticImports">
+            <property name="comesBefore" value="false"/>
+        </rule-config>
     </ruleset-ref>
 
     <ruleset-ref path='rulesets/jdbc.xml'>
@@ -52,6 +55,9 @@
     </ruleset-ref>
 
     <ruleset-ref path='rulesets/naming.xml'>
+        <rule-config name="FieldName">
+            <property name="ignoreFieldNames" value="log"/>
+        </rule-config>
     </ruleset-ref>
 
     <ruleset-ref path='rulesets/security.xml'>
