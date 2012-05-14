@@ -21,25 +21,21 @@ import static com.awesomecompany.TestUtil.*
  */
 @RunWith(SpringJUnit4ClassRunner)
 @ContextConfiguration('/schema/appCtx.xml')
-//@ContextConfiguration('/appCtxDefaultGorm.xml')
 @Transactional
 class XGORMNamespaceHandlerTest {
   private static final Logger log = LoggerFactory.getLogger(XGORMNamespaceHandlerTest)
 
   @Test
   void shouldSavePerson() {
+    def people = Person.list()
+    assert !people
     def person = newDemoPerson()
 
     person.save()
+    people = Person.list()
 
-    def people = Person.list()
     assert people
     log.debug(people.dump())
-
-    def personInDB = Person.findByEmail(EMAIL)
-    assert personInDB
-    assert personInDB.firstName == FIRST_NAME
-
   }
 
   @Test
@@ -47,7 +43,6 @@ class XGORMNamespaceHandlerTest {
     def person = newDemoPerson()
 
     assert person.save()
-
 
     def c = Person.withCriteria(uniqueResult: true) {
       eq 'email', EMAIL
