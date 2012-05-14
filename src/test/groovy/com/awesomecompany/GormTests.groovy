@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationContext
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
+import org.codehaus.groovy.grails.orm.hibernate.validation.HibernateDomainClassValidator
+import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,6 +21,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 class GormTests {
   @Autowired
   ApplicationContext applicationContext
+
+
 
   @Test
   void shouldSavePerson() {
@@ -34,8 +38,21 @@ class GormTests {
   }
 
   @Test
+  void shouldValidateUsingTheDomainClassValidator() {
+    HibernateDomainClassValidator personValidator = applicationContext.getBean('com.awesomecompany.PersonValidator')
+
+    Person.withTransaction {
+      def person = new Person()
+      personValidator.validate(person, person.errors)
+
+      assert person.errors
+    }
+  }
+
+  @Test
   void shouldValidatePersonUsingConstraints() {
     def person = new Person()
+
     def validPerson = person.validate()
     def hasErrors = person.hasErrors()
 

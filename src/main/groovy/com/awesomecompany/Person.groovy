@@ -34,8 +34,10 @@ class Person {
   static constraints = {
     def onlyNullable = [nullable: true]
     def nullableMaxSize = [nullable: true, maxSize: 30]
-    firstName onlyNullable
-    lastName onlyNullable
+    def nameConstraint = [nullable: false, blank: false, maxSize: 100]
+
+    firstName nameConstraint
+    lastName nameConstraint
     referrerCode nullableMaxSize
     referredByCode nullableMaxSize
     referredById onlyNullable
