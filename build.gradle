@@ -21,6 +21,13 @@ cobertura {
   coverageSourceDirs << project.sourceSets.main.groovy.srcDirs
 }
 
+build.dependsOn cobertura
+cobertura.dependsOn cleanTest, test
+
+cobertura.doLast {
+  test
+}
+
 repositories {
   mavenCentral()
   mavenRepo url: 'http://repo.grails.org/grails/core'
