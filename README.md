@@ -16,3 +16,5 @@ Simple like that, take a look into the test cases to see GORM in Action.
 Enjoy and please send pull request if you want to improve this.
 
 cheers
+
+*I think this project is dead*
