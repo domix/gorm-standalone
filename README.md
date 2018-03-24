@@ -17,4 +17,4 @@ Enjoy and please send pull request if you want to improve this.
 
 cheers
 
-*I think this project is dead*
+*This project is dead*
